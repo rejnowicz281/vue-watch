@@ -1,4 +1,3 @@
-import InfiniteTimerView from "@/views/InfiniteTimerView.vue";
 import TimerHistoryView from "@/views/TimerHistoryView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import TimerView from "../views/TimerView.vue";
@@ -9,7 +8,7 @@ const router = createRouter({
         {
             path: "/",
             name: "infiniteTimer",
-            component: InfiniteTimerView
+            redirect: "/timers/infinite"
         },
         {
             path: "/timers/:id",
