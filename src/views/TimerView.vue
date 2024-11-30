@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import EndDialog from "@/components/timers/EndDialog.vue";
 import Button from "@/components/ui/button/Button.vue";
 import { formatSeconds, sampleTimers } from "@/lib/utils";
 import { computed, onBeforeUnmount, ref, watch } from "vue";
@@ -50,11 +51,20 @@ const pause = () => {
 };
 
 const end = () => {
-    started.value = false;
+    initEnd();
+    finishEnd();
+};
+
+const initEnd = () => {
     paused.value = true;
-    setStartingSeconds();
-    stopInterval();
     dialogVisible.value = true;
+    stopInterval();
+};
+
+const finishEnd = () => {
+    started.value = false;
+    dialogVisible.value = false;
+    setStartingSeconds();
 };
 
 const initInterval = () => {
@@ -62,7 +72,7 @@ const initInterval = () => {
         intervalId = setInterval(() => {
             if (!paused.value) seconds.value = isInfiniteTimer.value ? seconds.value + 1 : seconds.value - 1;
 
-            if (!isInfiniteTimer.value && seconds.value < 0) end();
+            if (!isInfiniteTimer.value && seconds.value <= 0) initEnd();
         }, 1000);
 };
 
@@ -78,15 +88,32 @@ watch(
     () => end()
 );
 
-onBeforeUnmount(() => stopInterval());
+const handleDialogOpenChange = (open: boolean) => {
+    dialogVisible.value = open;
+};
+
+onBeforeUnmount(() => {
+    stopInterval();
+});
 </script>
 
 <template>
     <div>
-        <h1>Timer {{ timer.name }}</h1>
+        <h1>{{ timer.name }}</h1>
         <p>{{ formatSeconds(seconds) }}</p>
-        <Button v-if="paused" @click="start">{{ started ? "Resume" : "Start" }}</Button>
-        <Button v-else @click="pause">Pause</Button>
-        <Button variant="outline" v-if="started" @click="end">End</Button>
+        <template v-if="isInfiniteTimer || seconds >= 1">
+            <Button v-if="paused" @click="start">{{ started ? "Resume" : "Start" }}</Button>
+            <Button v-else @click="pause">Pause</Button>
+        </template>
+        <Button variant="outline" v-if="started" @click="initEnd">End</Button>
+
+        <EndDialog
+            v-if="dialogVisible"
+            :finishEnd="finishEnd"
+            :onOpenChange="handleDialogOpenChange"
+            :isInfiniteTimer="isInfiniteTimer"
+            :seconds="seconds"
+            :timerLength="timer.length"
+        />
     </div>
 </template>
