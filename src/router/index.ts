@@ -13,8 +13,12 @@ const router = createRouter({
         {
             path: "/timers/:id",
             name: "timer",
-            component: TimerView,
-            children: [{ path: "history", component: TimerHistoryView }]
+            component: TimerView
+        },
+        {
+            path: "/timers/:id/history",
+            name: "timerHistory",
+            component: TimerHistoryView
         }
     ]
 });

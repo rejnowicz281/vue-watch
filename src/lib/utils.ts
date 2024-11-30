@@ -17,6 +17,12 @@ export const sampleTimerHistory = [
         seconds_passed: 5,
         timer_length: 10,
         note: "half finished"
+    },
+    {
+        id: "3",
+        seconds_passed: 5,
+        timer_length: 0,
+        note: "infint"
     }
 ];
 

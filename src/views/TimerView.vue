@@ -99,7 +99,8 @@ onBeforeUnmount(() => {
 
 <template>
     <div>
-        <h1>{{ timer.name }}</h1>
+        <RouterLink :to="`/timers/${id}/history`">Go to History</RouterLink>
+        <h1 class="text-4xl font-bold">{{ timer.name }}</h1>
         <p>{{ formatSeconds(seconds) }}</p>
         <template v-if="isInfiniteTimer || seconds >= 1">
             <Button v-if="paused" @click="start">{{ started ? "Resume" : "Start" }}</Button>

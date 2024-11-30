@@ -23,7 +23,7 @@ const timers = ref(sampleTimers);
 <template>
     <Sidebar variant="floating" collapsible="icon">
         <SidebarContent>
-            <SidebarHeader>
+            <SidebarHeader class="group-data-[collapsible=icon]:hidden">
                 <form>
                     <Input placeholder="New Timer" />
                     <Button class="mt-2 w-full" type="submit">
