@@ -10,9 +10,12 @@ import {
     SidebarMenuItem
 } from "@/components/ui/sidebar";
 import { formatSeconds, sampleTimers } from "@/lib/utils";
-import { Infinity, Play } from "lucide-vue-next";
+import { Infinity, Play, Plus } from "lucide-vue-next";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import Button from "../ui/button/Button.vue";
+import Input from "../ui/input/Input.vue";
+import SidebarHeader from "../ui/sidebar/SidebarHeader.vue";
 
 const timers = ref(sampleTimers);
 </script>
@@ -20,6 +23,15 @@ const timers = ref(sampleTimers);
 <template>
     <Sidebar variant="floating" collapsible="icon">
         <SidebarContent>
+            <SidebarHeader>
+                <form>
+                    <Input placeholder="New Timer" />
+                    <Button class="mt-2 w-full" type="submit">
+                        <Plus />
+                        Create Timer</Button
+                    >
+                </form>
+            </SidebarHeader>
             <SidebarGroup>
                 <SidebarGroupLabel>Timers</SidebarGroupLabel>
                 <SidebarGroupContent>

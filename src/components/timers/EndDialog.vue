@@ -28,7 +28,7 @@ const secondsPassed = computed(() => timerLength - seconds);
                     Click End to end the timer countdown. You can also add a note to the timer history.
                 </DialogDescription>
             </DialogHeader>
-            <form v-on:submit.prevent className="grid gap-4">
+            <form @submit.prevent="finishEnd" className="grid gap-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="note" className="text-right">Note</Label>
                     <Input type="text" id="note" name="note" placeholder="(Optional)" class="col-span-3" />
@@ -38,7 +38,7 @@ const secondsPassed = computed(() => timerLength - seconds);
                     <DialogClose type="button" variant="outline" asChild>
                         <Button>Cancel</Button>
                     </DialogClose>
-                    <Button @click="finishEnd">
+                    <Button>
                         End ({{
                             isInfiniteTimer
                                 ? formatSeconds(seconds)
