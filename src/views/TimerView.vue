@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import EndDialog from "@/components/timers/EndDialog.vue";
 import Button from "@/components/ui/button/Button.vue";
-import { formatSeconds, sampleTimers } from "@/lib/utils";
+import { formatSeconds, sampleTimers } from "@/lib/utils/general";
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 import { useRoute } from "vue-router";

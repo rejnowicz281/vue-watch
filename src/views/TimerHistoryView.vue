@@ -3,7 +3,7 @@ import Card from "@/components/ui/card/Card.vue";
 import CardDescription from "@/components/ui/card/CardDescription.vue";
 import CardHeader from "@/components/ui/card/CardHeader.vue";
 import CardTitle from "@/components/ui/card/CardTitle.vue";
-import { formatSeconds, sampleTimerHistory } from "@/lib/utils";
+import { formatSeconds, sampleTimerHistory } from "@/lib/utils/general";
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 

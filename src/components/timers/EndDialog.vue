@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { formatSeconds } from "@/lib/utils";
+import { formatSeconds } from "@/lib/utils/general";
 import { computed } from "vue";
 import Button from "../ui/button/Button.vue";
 import DialogClose from "../ui/dialog/DialogClose.vue";

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter } from "@/components/ui/sidebar";
 
 import {
     SidebarGroup,
@@ -9,10 +9,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { formatSeconds, sampleTimers } from "@/lib/utils";
+import { formatSeconds, sampleTimers } from "@/lib/utils/general";
 import { Infinity, Play, Plus } from "lucide-vue-next";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import LogoutButton from "../auth/LogoutButton.vue";
 import Button from "../ui/button/Button.vue";
 import Input from "../ui/input/Input.vue";
 import SidebarHeader from "../ui/sidebar/SidebarHeader.vue";
@@ -61,5 +62,8 @@ const timers = ref(sampleTimers);
                 </SidebarGroupContent>
             </SidebarGroup>
         </SidebarContent>
+        <SidebarFooter>
+            <LogoutButton />
+        </SidebarFooter>
     </Sidebar>
 </template>
