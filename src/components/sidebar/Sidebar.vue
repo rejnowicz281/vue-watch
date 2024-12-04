@@ -10,9 +10,9 @@ import {
     SidebarMenuItem
 } from "@/components/ui/sidebar";
 import { useFetch } from "@/composables/use-fetch";
-import type { Watch } from "@/lib/types/watch";
+import type { Timer } from "@/lib/types/timer";
 import { formatSeconds } from "@/lib/utils/general";
-import watchService from "@/services/watch-service";
+import timerService from "@/services/timer-service";
 import { Infinity, Play, Plus } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
 import LogoutButton from "../auth/LogoutButton.vue";
@@ -20,7 +20,7 @@ import Button from "../ui/button/Button.vue";
 import Input from "../ui/input/Input.vue";
 import SidebarHeader from "../ui/sidebar/SidebarHeader.vue";
 
-const { data, error, isLoading } = useFetch<Watch[]>(watchService.getWatches);
+const { data, error, isLoading } = useFetch<Timer[]>(timerService.getTimers);
 
 const timers = data;
 </script>
