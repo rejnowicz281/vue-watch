@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import Button from "@/components/ui/button/Button.vue";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import DialogClose from "@/components/ui/dialog/DialogClose.vue";
+import DialogDescription from "@/components/ui/dialog/DialogDescription.vue";
+import Input from "@/components/ui/input/Input.vue";
+import Label from "@/components/ui/label/Label.vue";
 import { formatSeconds } from "@/lib/utils/general";
 import { computed } from "vue";
-import Button from "../ui/button/Button.vue";
-import DialogClose from "../ui/dialog/DialogClose.vue";
-import DialogDescription from "../ui/dialog/DialogDescription.vue";
-import Input from "../ui/input/Input.vue";
-import Label from "../ui/label/Label.vue";
 
 const { onOpenChange, seconds, timerLength, isInfiniteTimer } = defineProps<{
     onOpenChange: (open: boolean) => void;

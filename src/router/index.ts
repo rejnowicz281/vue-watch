@@ -3,7 +3,7 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import TimerHistoryView from "@/views/TimerHistoryView.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import TimerView from "../views/TimerView.vue";
+import TimerView from "../views/timer/TimerView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
