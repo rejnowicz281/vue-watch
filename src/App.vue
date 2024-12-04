@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { onBeforeMount, ref } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import Loading from "./components/general/Loading.vue";
-import { apiRefresh } from "./lib/utils/api";
+import authService from "./services/auth-service";
 import { authStore } from "./store/auth";
 
 const isLoading = ref(true);
@@ -12,7 +12,7 @@ const router = useRouter();
 
 async function refreshToken() {
     if (!authStore.user) {
-        const response = await apiRefresh();
+        const response = await authService.refresh();
 
         if (response.status === 200) {
             try {

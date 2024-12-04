@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { apiLogin } from "@/lib/utils/api";
+import authService from "@/services/auth-service";
 import { authStore } from "@/store/auth";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const onSubmit = async () => {
-    const res = await apiLogin("john", "changeme");
+    const res = await authService.login("john", "changeme");
 
     if (res.status === 200) {
         authStore.update(res.data.accessToken, "john");

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { apiLogout } from "@/lib/utils/api";
+import authService from "@/services/auth-service";
 import { authStore } from "@/store/auth";
 import { useRouter } from "vue-router";
 import Button from "../ui/button/Button.vue";
 const router = useRouter();
 
 const logout = async () => {
-    const res = await apiLogout();
+    const res = await authService.logout();
 
     if (res.status === 200) {
         authStore.update(null, null);
