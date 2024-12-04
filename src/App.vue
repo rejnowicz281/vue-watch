@@ -37,6 +37,8 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <Loading v-if="isLoading" />
-    <RouterView v-else />
+    <div class="min-h-screen flex flex-col">
+        <Loading v-if="isLoading" />
+        <RouterView v-else />
+    </div>
 </template>
