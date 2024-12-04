@@ -18,10 +18,7 @@ const isInfiniteTimer = computed(() => id.value === "infinite" || !id.value);
 const { data, error, isLoading, doFetch } = useFetch<Timer>(async () =>
     isInfiniteTimer.value
         ? {
-              data: infiniteTimer,
-              error: null,
-              isLoading: false,
-              doFetch: undefined
+              data: infiniteTimer
           }
         : await timerService.getTimer(id.value)
 );
