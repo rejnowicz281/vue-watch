@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
 export function useFetch<T>(fetchFn: () => Promise<{ data: T }>) {
     const data = ref<T | null>(null);
@@ -7,6 +7,9 @@ export function useFetch<T>(fetchFn: () => Promise<{ data: T }>) {
 
     const doFetch = async () => {
         try {
+            isLoading.value = true;
+            error.value = null;
+
             const response = await fetchFn();
             data.value = response.data;
         } catch (err: any) {
@@ -16,11 +19,12 @@ export function useFetch<T>(fetchFn: () => Promise<{ data: T }>) {
         }
     };
 
-    onMounted(doFetch);
+    doFetch();
 
     return {
         data,
         isLoading,
-        error
+        error,
+        doFetch
     };
 }
