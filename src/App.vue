@@ -12,18 +12,18 @@ const router = useRouter();
 
 async function refreshToken() {
     if (!authStore.user) {
-        const response = await authService.refresh();
+        try {
+            const response = await authService.refresh();
 
-        if (response.status === 200) {
-            try {
+            if (response.status === 200) {
                 const token = response.data.accessToken;
                 const decodedToken = jwtDecode(token);
 
                 authStore.update(token, decodedToken);
-            } catch (error) {
-                console.error("Token decode fail", error);
-                authStore.update(null, null);
             }
+        } catch (error) {
+            console.error("Failed to refresh token", error);
+            authStore.update(null, null);
         }
     }
 
@@ -32,7 +32,9 @@ async function refreshToken() {
 
 onBeforeMount(async () => {
     await refreshToken();
-    if (!authStore.user && router.currentRoute.value.name !== "register") router.push("/login");
+
+    if (!authStore.user && router.currentRoute.value.name !== "register" && router.currentRoute.value.name !== "login")
+        router.push("/login");
 });
 </script>
 

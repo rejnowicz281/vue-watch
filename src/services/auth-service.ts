@@ -2,9 +2,9 @@ import { API } from "@/lib/utils/api";
 import debug from "@/lib/utils/debug";
 
 export default {
-    async register(username: string, password: string) {
+    async register(email: string, password: string) {
         try {
-            const res = await API.post("auth/register", { username, password });
+            const res = await API.post("auth/register", { email, password });
 
             debug.log("post express register response", res);
 
@@ -14,9 +14,9 @@ export default {
             return error.response;
         }
     },
-    async login(username: string, password: string) {
+    async login(email: string, password: string) {
         try {
-            const res = await API.post("auth/login", { username, password });
+            const res = await API.post("auth/login", { email, password });
 
             debug.log("post express login response", res);
 
@@ -56,10 +56,8 @@ export default {
 
             debug.log("post express github token response", tokenRes);
 
-            const res = await API.get("auth/github/user", {
-                headers: {
-                    Authorization: `Bearer ${tokenRes.data.accessToken}`
-                }
+            const res = await API.post("auth/github/login", {
+                access_token: tokenRes.data.token
             });
 
             debug.log("get express github user response", res);
