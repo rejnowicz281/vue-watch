@@ -6,7 +6,7 @@ import EndDialog from "./EndDialog.vue";
 
 const { timerLength, timerId, isInfiniteTimer } = defineProps<{
     timerLength: number;
-    timerId: string;
+    timerId?: string;
     isInfiniteTimer: boolean;
 }>();
 

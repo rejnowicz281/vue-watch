@@ -56,9 +56,9 @@ const timers = data;
                             <p>{{ error }}</p>
                         </div>
                         <SidebarMenuSkeleton v-else-if="isLoading" v-for="i in 3" :key="i" />
-                        <SidebarMenuItem v-else v-for="timer in timers" :key="timer.id">
+                        <SidebarMenuItem v-else v-for="timer in timers" :key="timer._id">
                             <SidebarMenuButton asChild>
-                                <RouterLink :to="`/timers/${timer.id}`">
+                                <RouterLink :to="`/timers/${timer._id}`">
                                     <Play />
                                     <div className="flex items-center justify-between flex-1">
                                         {{ timer.name }}

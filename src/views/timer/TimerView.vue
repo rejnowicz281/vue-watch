@@ -37,6 +37,6 @@ watch(id, () => doFetch && doFetch());
     <template v-else>
         <RouterLink :to="`/timers/${id}/history`">Go to History</RouterLink>
         <h1 class="text-4xl font-bold">{{ data.name }}</h1>
-        <TimerFunctionality :timerLength="data.length" :timerId="data.id" :isInfiniteTimer="isInfiniteTimer" />
+        <TimerFunctionality :timerLength="data.length" :timerId="data._id" :isInfiniteTimer="isInfiniteTimer" />
     </template>
 </template>

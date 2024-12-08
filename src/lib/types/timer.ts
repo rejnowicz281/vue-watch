@@ -1,7 +1,7 @@
 export type Timer = {
-    id: string;
+    _id: string;
     length: number;
     name: string;
 };
 
-export type TimerNoId = Omit<Timer, "id">;
+export type TimerNoId = Omit<Timer, "_id">;

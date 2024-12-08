@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { jwtDecode } from "jwt-decode";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, ref } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import Loading from "./components/general/Loading.vue";
+import { API, clearInterceptors, setupInterceptors } from "./lib/utils/api";
 import authService from "./services/auth-service";
 import { authStore } from "./store/auth";
 
@@ -17,17 +17,14 @@ async function refreshToken() {
 
             if (response.status === 200) {
                 const token = response.data.accessToken;
-                const decodedToken = jwtDecode(token);
 
-                authStore.update(token, decodedToken);
+                authStore.validateToken(token);
             }
         } catch (error) {
             console.error("Failed to refresh token", error);
             authStore.update(null, null);
         }
     }
-
-    isLoading.value = false;
 }
 
 onBeforeMount(async () => {
@@ -35,6 +32,14 @@ onBeforeMount(async () => {
 
     if (!authStore.user && router.currentRoute.value.name !== "register" && router.currentRoute.value.name !== "login")
         router.push("/login");
+
+    await setupInterceptors(API);
+
+    isLoading.value = false;
+});
+
+onBeforeUnmount(() => {
+    clearInterceptors(API);
 });
 </script>
 

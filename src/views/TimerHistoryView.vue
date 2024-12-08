@@ -40,7 +40,7 @@ const history = ref(sampleTimerHistory);
         <RouterLink :to="`/timers/${id}`">Back</RouterLink>
         <h1 class="text-4xl font-semibold">Timer History</h1>
         <div class="flex flex-col gap-4">
-            <Card v-for="entry in history" :key="entry.id">
+            <Card v-for="entry in history" :key="entry._id">
                 <CardHeader
                     ><CardTitle>{{ entry.note }}</CardTitle>
                     <CardDescription>
