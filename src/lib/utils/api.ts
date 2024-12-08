@@ -19,7 +19,7 @@ export const API = axios.create({
     }
 });
 
-const requestInterceptor = async (instance: AxiosInstance) => {
+const requestInterceptor = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         (config) => {
             if (authStore.accessToken) config.headers["Authorization"] = "Bearer " + authStore.accessToken;
@@ -32,7 +32,7 @@ const requestInterceptor = async (instance: AxiosInstance) => {
     );
 };
 
-const responseInterceptor = async (instance: AxiosInstance) => {
+const responseInterceptor = (instance: AxiosInstance) => {
     instance.interceptors.response.use(
         (response) => response,
         async (error) => {
@@ -60,8 +60,9 @@ const responseInterceptor = async (instance: AxiosInstance) => {
     );
 };
 
-export const setupInterceptors = async (instance: AxiosInstance) => {
-    await Promise.all([requestInterceptor(instance), responseInterceptor(instance)]);
+export const setupInterceptors = (instance: AxiosInstance) => {
+    requestInterceptor(instance);
+    responseInterceptor(instance);
 };
 
 export const clearInterceptors = (instance: AxiosInstance) => {

@@ -30,12 +30,12 @@ async function refreshToken() {
 onBeforeMount(async () => {
     await refreshToken();
 
+    isLoading.value = false;
+
     if (!authStore.user && router.currentRoute.value.name !== "register" && router.currentRoute.value.name !== "login")
         router.push("/login");
 
-    await setupInterceptors(API);
-
-    isLoading.value = false;
+    setupInterceptors(API);
 });
 
 onBeforeUnmount(() => {
