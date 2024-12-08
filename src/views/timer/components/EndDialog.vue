@@ -35,7 +35,7 @@ const secondsPassed = computed(() => timerLength - seconds);
                 </div>
 
                 <DialogFooter>
-                    <DialogClose type="button" variant="outline" asChild>
+                    <DialogClose type="button" variant="outline" :as-child="true">
                         <Button>Cancel</Button>
                     </DialogClose>
                     <Button>

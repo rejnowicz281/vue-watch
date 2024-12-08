@@ -8,7 +8,7 @@ const router = useRouter();
 const logout = async () => {
     const res = await authStore.logout();
 
-    if (res.status === 200) router.push("/login");
+    if (res.status === 200) router.push("/auth");
 };
 </script>
 

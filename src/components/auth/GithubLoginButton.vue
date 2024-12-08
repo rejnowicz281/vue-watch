@@ -9,7 +9,7 @@ const onClick = () => {
 </script>
 
 <template>
-    <Button className="gap-1" variant="outline" :onClick="onClick">
+    <Button class="flex gap-1" variant="outline" :onClick="onClick">
         <Github :size="20" />
         Github Login
     </Button>

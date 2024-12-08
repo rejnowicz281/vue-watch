@@ -1,10 +1,10 @@
-import { API } from "@/lib/utils/api";
+import { API, noTokenAPI } from "@/lib/utils/api";
 import debug from "@/lib/utils/debug";
 
 export default {
     async register(email: string, password: string) {
         try {
-            const res = await API.post("auth/register", { email, password });
+            const res = await noTokenAPI.post("auth/register", { email, password });
 
             debug.log("post express register response", res);
 
@@ -16,7 +16,7 @@ export default {
     },
     async login(email: string, password: string) {
         try {
-            const res = await API.post("auth/login", { email, password });
+            const res = await noTokenAPI.post("auth/login", { email, password });
 
             debug.log("post express login response", res);
 
@@ -28,7 +28,7 @@ export default {
     },
     async logout() {
         try {
-            const res = await API.delete("auth/logout");
+            const res = await noTokenAPI.delete("auth/logout");
 
             debug.log("delete express logout response", res);
 
@@ -40,7 +40,7 @@ export default {
     },
     async refresh() {
         try {
-            const res = await API.post("auth/refresh");
+            const res = await noTokenAPI.post("auth/refresh");
 
             debug.log("post express refresh response", res);
 
@@ -52,7 +52,7 @@ export default {
     },
     async githubLogin(code: string) {
         try {
-            const tokenRes = await API.post("auth/github/token", { code });
+            const tokenRes = await noTokenAPI.post("auth/github/token", { code });
 
             debug.log("post express github token response", tokenRes);
 

@@ -32,8 +32,7 @@ onBeforeMount(async () => {
 
     isLoading.value = false;
 
-    if (!authStore.user && router.currentRoute.value.name !== "register" && router.currentRoute.value.name !== "login")
-        router.push("/login");
+    if (!authStore.user && router.currentRoute.value.name !== "auth") router.push("/auth");
 
     setupInterceptors(API);
 });

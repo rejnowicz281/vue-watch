@@ -13,6 +13,7 @@ import { useFetch } from "@/composables/use-fetch";
 import type { Timer } from "@/lib/types/timer";
 import { formatSeconds } from "@/lib/utils/general";
 import timerService from "@/services/timer-service";
+import { authStore } from "@/store/auth";
 import { Infinity, Play, Plus } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
 import LogoutButton from "../auth/LogoutButton.vue";
@@ -42,7 +43,7 @@ const timers = data;
                 <SidebarGroupContent>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
+                            <SidebarMenuButton :as-child="true">
                                 <RouterLink to="/timers/infinite">
                                     <Play />
                                     <div className="flex items-center justify-between flex-1">
@@ -57,7 +58,7 @@ const timers = data;
                         </div>
                         <SidebarMenuSkeleton v-else-if="isLoading" v-for="i in 3" :key="i" />
                         <SidebarMenuItem v-else v-for="timer in timers" :key="timer._id">
-                            <SidebarMenuButton asChild>
+                            <SidebarMenuButton :as-child="true">
                                 <RouterLink :to="`/timers/${timer._id}`">
                                     <Play />
                                     <div className="flex items-center justify-between flex-1">
@@ -72,6 +73,7 @@ const timers = data;
             </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
+            <span class="text-center truncate group-data-[collapsible=icon]:hidden">{{ authStore.user }}</span>
             <LogoutButton />
         </SidebarFooter>
     </Sidebar>

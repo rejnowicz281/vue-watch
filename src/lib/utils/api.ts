@@ -3,7 +3,7 @@ import { authStore } from "@/store/auth";
 import axios, { type AxiosInstance } from "axios";
 import { EXPRESS_URL } from "./config";
 
-export const noAuthAPI = axios.create({
+export const noTokenAPI = axios.create({
     baseURL: EXPRESS_URL,
     withCredentials: true,
     headers: {
