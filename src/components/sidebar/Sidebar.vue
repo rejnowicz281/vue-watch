@@ -9,22 +9,26 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { useFetch } from "@/composables/use-fetch";
-import type { Timer } from "@/lib/types/timer";
+import { useAsync } from "@/composables/use-async";
 import { formatSeconds } from "@/lib/utils/general";
 import timerService from "@/services/timer-service";
 import { authStore } from "@/store/auth";
+import { sidebarStore } from "@/store/sidebar";
 import { Infinity, LoaderCircle, Play, Plus } from "lucide-vue-next";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import LogoutButton from "../auth/LogoutButton.vue";
 import Button from "../ui/button/Button.vue";
 import Input from "../ui/input/Input.vue";
 import SidebarHeader from "../ui/sidebar/SidebarHeader.vue";
 
-const { data, error, isLoading } = useFetch<Timer[]>(timerService.getTimers);
+const { error, isLoading } = useAsync(async () => {
+    const res = await timerService.getTimers();
 
-const timers = data;
+    if (res.status === 200) sidebarStore.setTimers(res.data);
+});
+
+const timers = computed(() => sidebarStore.timers);
 
 const isSubmitting = ref(false);
 const name = ref();
@@ -38,7 +42,7 @@ const onSubmit = async () => {
     const res = await timerService.addTimer({ name: name.value, length: length.value });
 
     if (res.status === 200) {
-        timers.value = [...timers.value, res.data];
+        sidebarStore.setTimers([...sidebarStore.timers, res.data]);
 
         name.value = "";
         length.value = "";
