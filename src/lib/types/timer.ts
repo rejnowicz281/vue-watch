@@ -9,10 +9,10 @@ export type TimerNoId = Omit<Timer, "_id">;
 
 export type HistoryEntry = {
     _id: string;
-    timer: string;
+    timer?: string;
     secondsPassed: number;
-    timerLength: number;
-    note: string;
+    timerLength?: number;
+    note?: string;
     createdAt: string;
 };
 

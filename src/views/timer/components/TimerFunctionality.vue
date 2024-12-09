@@ -92,6 +92,7 @@ onBeforeUnmount(() => {
 
         <EndDialog
             v-if="dialogVisible"
+            :timerId="timerId"
             :finishEnd="finishEnd"
             :onOpenChange="handleDialogOpenChange"
             :isInfiniteTimer="isInfiniteTimer"
