@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Loading from "@/components/general/Loading.vue";
+import Button from "@/components/ui/button/Button.vue";
 import Card from "@/components/ui/card/Card.vue";
 import CardDescription from "@/components/ui/card/CardDescription.vue";
 import CardFooter from "@/components/ui/card/CardFooter.vue";
@@ -23,6 +24,14 @@ const { data, error, isLoading, doFetch } = useFetch<HistoryEntry[]>(
 );
 
 watch(id, () => doFetch && doFetch());
+
+const onDelete = async (id: string) => {
+    if (!data.value) return;
+
+    const res = await timerHistoryService.deleteHistoryEntry(id);
+
+    if (res.status === 200) data.value = data.value.filter((entry) => entry._id !== id);
+};
 </script>
 
 <template>
@@ -48,6 +57,7 @@ watch(id, () => doFetch && doFetch());
                         }}
                     </CardDescription>
                     <CardFooter>
+                        <Button @click="onDelete(entry._id)" variant="outline" size="sm">Delete</Button>
                         <p>{{ entry.createdAt }}</p>
                     </CardFooter>
                 </CardHeader>

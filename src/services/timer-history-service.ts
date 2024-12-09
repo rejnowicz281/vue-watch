@@ -23,7 +23,7 @@ export default {
             return error.response;
         }
     },
-    async deleteTimer(id: string) {
+    async deleteHistoryEntry(id: string) {
         try {
             const res = await API.delete(`timer-history/${id}`);
             debug.log("delete timer history entry response", res);
