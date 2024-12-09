@@ -15,7 +15,7 @@ const id = computed(() => route.params.id as string);
 
 const isInfiniteTimer = computed(() => id.value === "infinite" || !id.value);
 
-const { data, error, isLoading, doFetch } = useFetch<Timer>(async () =>
+const { data, error, isLoading, doFetch } = useFetch<Timer[]>(async () =>
     isInfiniteTimer.value
         ? {
               data: [infiniteTimer]
