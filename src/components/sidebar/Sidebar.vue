@@ -14,7 +14,8 @@ import type { Timer } from "@/lib/types/timer";
 import { formatSeconds } from "@/lib/utils/general";
 import timerService from "@/services/timer-service";
 import { authStore } from "@/store/auth";
-import { Infinity, Play, Plus } from "lucide-vue-next";
+import { Infinity, LoaderCircle, Play, Plus } from "lucide-vue-next";
+import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import LogoutButton from "../auth/LogoutButton.vue";
 import Button from "../ui/button/Button.vue";
@@ -24,16 +25,41 @@ import SidebarHeader from "../ui/sidebar/SidebarHeader.vue";
 const { data, error, isLoading } = useFetch<Timer[]>(timerService.getTimers);
 
 const timers = data;
+
+const isSubmitting = ref(false);
+const name = ref();
+const length = ref();
+
+const onSubmit = async () => {
+    if (!timers.value || isSubmitting.value) return;
+
+    isSubmitting.value = true;
+
+    const res = await timerService.addTimer({ name: name.value, length: length.value });
+
+    if (res.status === 200) {
+        timers.value = [...timers.value, res.data];
+
+        name.value = "";
+        length.value = "";
+    }
+
+    isSubmitting.value = false;
+};
 </script>
 
 <template>
     <Sidebar variant="floating" collapsible="icon">
         <SidebarContent>
             <SidebarHeader class="group-data-[collapsible=icon]:hidden">
-                <form>
-                    <Input :disabled="isLoading" placeholder="New Timer" />
-                    <Button :disabled="isLoading" class="mt-2 w-full" type="submit">
-                        <Plus />
+                <form v-on:submit.prevent="onSubmit">
+                    <div class="flex flex-col gap-1">
+                        <Input v-model="name" :disabled="isLoading" placeholder="New Timer" />
+                        <Input v-model="length" :disabled="isLoading" type="number" placeholder="Length" />
+                    </div>
+                    <Button :disabled="isLoading || isSubmitting" class="mt-2 w-full" type="submit">
+                        <LoaderCircle v-if="isSubmitting" class="animate-spin" />
+                        <Plus v-else />
                         Create Timer</Button
                     >
                 </form>

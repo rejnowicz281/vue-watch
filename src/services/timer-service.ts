@@ -25,6 +25,7 @@ export default {
     },
     async addTimer(timer: TimerNoId) {
         try {
+            console.log("adding timer ", timer);
             const res = await API.post("timers", timer);
             debug.log("post timer response", res);
             return res;
