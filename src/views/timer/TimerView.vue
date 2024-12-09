@@ -18,12 +18,14 @@ const isInfiniteTimer = computed(() => id.value === "infinite" || !id.value);
 const { data, error, isLoading, doFetch } = useFetch<Timer>(async () =>
     isInfiniteTimer.value
         ? {
-              data: infiniteTimer
+              data: [infiniteTimer]
           }
         : await timerService.getTimer(id.value)
 );
 
 watch(id, () => doFetch && doFetch());
+
+const timer = computed(() => (data.value instanceof Array ? data.value[0] : null));
 </script>
 
 <template>
@@ -31,12 +33,12 @@ watch(id, () => doFetch && doFetch());
     <div v-else-if="error">
         <p>{{ error }}</p>
     </div>
-    <div v-else-if="!data">
+    <div v-else-if="!timer">
         <p>Timer not found</p>
     </div>
     <template v-else>
         <RouterLink :to="`/timers/${id}/history`">Go to History</RouterLink>
-        <h1 class="text-4xl font-bold">{{ data.name }}</h1>
-        <TimerFunctionality :timerLength="data.length" :timerId="data._id" :isInfiniteTimer="isInfiniteTimer" />
+        <h1 class="text-4xl font-bold">{{ timer.name }}</h1>
+        <TimerFunctionality :timerLength="timer.length" :timerId="timer._id" :isInfiniteTimer="isInfiniteTimer" />
     </template>
 </template>
