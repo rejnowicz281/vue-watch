@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 import Loading from "@/components/general/Loading.vue";
+import EditTimerDialog from "@/components/timers/dialogs/EditTimerDialog.vue";
 import Button from "@/components/ui/button/Button.vue";
-import { useFetch } from "@/composables/use-fetch";
+import { useAsync } from "@/composables/use-async";
 import { type Timer } from "@/lib/types/timer";
-import { infiniteTimer } from "@/lib/utils/timers";
+import { infiniteTimer, isTimerInfinite } from "@/lib/utils/timers";
 import timerService from "@/services/timer-service";
 import { sidebarStore } from "@/store/sidebar";
 import { useRoute, useRouter } from "vue-router";
@@ -17,22 +18,18 @@ const router = useRouter();
 
 const id = computed(() => route.params.id as string);
 
-const isInfiniteTimer = computed(() => id.value === "infinite" || !id.value);
+const timer = ref<Timer | null>(null);
 
-const { data, error, isLoading, doFetch } = useFetch<Timer[]>(async () =>
-    isInfiniteTimer.value
-        ? {
-              data: [infiniteTimer]
-          }
-        : await timerService.getTimer(id.value)
-);
+const { error, isLoading, doFetch } = useAsync(async () => {
+    const res = id.value === "infinite" ? { data: [infiniteTimer] } : await timerService.getTimer(id.value);
 
-watch(id, () => doFetch && doFetch());
+    if (id.value === "infinite" || res.status === 200) timer.value = res.data[0];
+});
 
-const timer = computed(() => (data.value instanceof Array ? data.value[0] : null));
+watch(id, doFetch);
 
 const onDelete = async () => {
-    if (!data.value) return;
+    if (!timer.value) return;
 
     const res = await timerService.deleteTimer(id.value);
 
@@ -40,6 +37,10 @@ const onDelete = async () => {
         sidebarStore.setTimers(sidebarStore.timers.filter((timer) => timer._id !== id.value));
         router.push("/timers/infinite");
     }
+};
+
+const onEditSuccess = async (newTimer: Timer) => {
+    timer.value = newTimer;
 };
 </script>
 
@@ -54,7 +55,14 @@ const onDelete = async () => {
     <template v-else>
         <RouterLink :to="`/timers/${id}/history`">Go to History</RouterLink>
         <h1 class="text-4xl font-bold">{{ timer.name }}</h1>
-        <Button v-if="!isInfiniteTimer" variant="destructive" @click="onDelete"> Delete </Button>
-        <TimerFunctionality :timerLength="timer.length" :timerId="timer._id" :isInfiniteTimer="isInfiniteTimer" />
+        <Button v-if="!isTimerInfinite(timer)" variant="destructive" @click="onDelete"> Delete </Button>
+        <EditTimerDialog
+            v-if="!isTimerInfinite(timer)"
+            :initialName="timer.name"
+            :initialLength="timer.length"
+            :onSuccess="onEditSuccess"
+            :_id="timer._id"
+        />
+        <TimerFunctionality :timer="timer" />
     </template>
 </template>

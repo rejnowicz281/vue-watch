@@ -65,7 +65,7 @@ const onSubmit = async () => {
                             <SidebarMenuButton :as-child="true">
                                 <RouterLink to="/timers/infinite">
                                     <Play />
-                                    <div className="flex items-center justify-between flex-1">
+                                    <div class="flex items-center justify-between flex-1">
                                         Infinite Timer <Infinity :size="20" />
                                     </div>
                                 </RouterLink>
@@ -80,9 +80,9 @@ const onSubmit = async () => {
                             <SidebarMenuButton :as-child="true">
                                 <RouterLink :to="`/timers/${timer._id}`">
                                     <Play />
-                                    <div className="flex items-center justify-between flex-1">
+                                    <div class="flex items-center justify-between flex-1">
                                         {{ timer.name }}
-                                        <div className="text-[13px]">{{ formatSeconds(timer.length) }}</div>
+                                        <div class="text-[13px]">{{ formatSeconds(timer.length) }}</div>
                                     </div>
                                 </RouterLink>
                             </SidebarMenuButton>

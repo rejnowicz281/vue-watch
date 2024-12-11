@@ -33,9 +33,9 @@ export default {
             return error.response;
         }
     },
-    async editTimer(timer: Timer) {
+    async editTimer(timer: Omit<Timer, "createdAt">) {
         try {
-            const res = await API.put(`timers/${timer._id}`, timer);
+            const res = await API.put(`timers`, timer);
             debug.log("put timer response", res);
             return res;
         } catch (error: any) {

@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import Button from "@/components/ui/button/Button.vue";
+import type { Timer } from "@/lib/types/timer";
 import { formatSeconds } from "@/lib/utils/general";
+import { isTimerInfinite } from "@/lib/utils/timers";
 import { onBeforeUnmount, ref, watch } from "vue";
 import EndDialog from "./EndDialog.vue";
 
-const { timerLength, timerId, isInfiniteTimer } = defineProps<{
-    timerLength: number;
-    timerId?: string;
-    isInfiniteTimer: boolean;
+const { timer } = defineProps<{
+    timer: Timer;
 }>();
 
-const seconds = ref(timerLength);
+const seconds = ref(timer.length);
 
 const setStartingSeconds = () => {
-    seconds.value = timerLength;
+    seconds.value = timer.length;
 };
 
 const paused = ref(true);
@@ -54,9 +54,9 @@ const finishEnd = () => {
 const initInterval = () => {
     if (intervalId === null)
         intervalId = setInterval(() => {
-            if (!paused.value) seconds.value = isInfiniteTimer ? seconds.value + 1 : seconds.value - 1;
+            if (!paused.value) seconds.value = isTimerInfinite(timer) ? seconds.value + 1 : seconds.value - 1;
 
-            if (!isInfiniteTimer && seconds.value <= 0) initEnd();
+            if (!isTimerInfinite(timer) && seconds.value <= 0) initEnd();
         }, 1000);
 };
 
@@ -68,7 +68,14 @@ const stopInterval = () => {
 };
 
 watch(
-    () => timerId,
+    () => timer.length,
+    (newLength) => {
+        seconds.value = newLength;
+    }
+);
+
+watch(
+    () => timer._id,
     () => end()
 );
 
@@ -84,7 +91,7 @@ onBeforeUnmount(() => {
 <template>
     <div>
         <p>{{ formatSeconds(seconds) }}</p>
-        <template v-if="isInfiniteTimer || seconds >= 1">
+        <template v-if="isTimerInfinite(timer) || seconds >= 1">
             <Button v-if="paused" @click="start">{{ started ? "Resume" : "Start" }}</Button>
             <Button v-else @click="pause">Pause</Button>
         </template>
@@ -92,12 +99,10 @@ onBeforeUnmount(() => {
 
         <EndDialog
             v-if="dialogVisible"
-            :timerId="timerId"
+            :timer="timer"
             :finishEnd="finishEnd"
             :onOpenChange="handleDialogOpenChange"
-            :isInfiniteTimer="isInfiniteTimer"
             :seconds="seconds"
-            :timerLength="timerLength"
         />
     </div>
 </template>

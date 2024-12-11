@@ -10,7 +10,7 @@ const { spinnerSize } = defineProps({
 </script>
 
 <template>
-    <div className="flex-1 flex justify-center items-center">
+    <div class="flex-1 flex justify-center items-center">
         <LoaderCircle :size="spinnerSize" class="animate-spin" />
     </div>
 </template>

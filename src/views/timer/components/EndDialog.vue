@@ -5,29 +5,29 @@ import DialogClose from "@/components/ui/dialog/DialogClose.vue";
 import DialogDescription from "@/components/ui/dialog/DialogDescription.vue";
 import Input from "@/components/ui/input/Input.vue";
 import Label from "@/components/ui/label/Label.vue";
+import type { Timer } from "@/lib/types/timer";
 import { formatSeconds } from "@/lib/utils/general";
+import { isTimerInfinite } from "@/lib/utils/timers";
 import timerHistoryService from "@/services/timer-history-service";
 import { computed, ref } from "vue";
 
-const { onOpenChange, seconds, timerLength, isInfiniteTimer, timerId, finishEnd } = defineProps<{
-    timerId?: string;
+const { onOpenChange, seconds, timer, finishEnd } = defineProps<{
     onOpenChange: (open: boolean) => void;
     finishEnd: () => void;
     seconds: number;
-    timerLength: number;
-    isInfiniteTimer: boolean;
+    timer: Timer;
 }>();
 
 const note = ref("");
 
-const secondsPassed = computed(() => timerLength - seconds);
+const secondsPassed = computed(() => timer.length - seconds);
 
 const onSubmit = () => {
     timerHistoryService.addTimerHistoryEntry({
-        timer: timerId,
+        timer: timer._id,
         note: note.value,
-        secondsPassed: isInfiniteTimer ? seconds : secondsPassed.value,
-        timerLength
+        secondsPassed: isTimerInfinite(timer) ? seconds : secondsPassed.value,
+        timerLength: timer.length
     });
 
     finishEnd();
@@ -43,9 +43,9 @@ const onSubmit = () => {
                     Click End to end the timer countdown. You can also add a note to the timer history.
                 </DialogDescription>
             </DialogHeader>
-            <form @submit.prevent="onSubmit" className="grid gap-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="note" className="text-right">Note</Label>
+            <form @submit.prevent="onSubmit" class="grid gap-4">
+                <div class="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="note" class="text-right">Note</Label>
                     <Input
                         v-model="note"
                         type="text"
@@ -62,9 +62,9 @@ const onSubmit = () => {
                     </DialogClose>
                     <Button>
                         End ({{
-                            isInfiniteTimer
+                            isTimerInfinite(timer)
                                 ? formatSeconds(seconds)
-                                : `${formatSeconds(secondsPassed)} / ${formatSeconds(timerLength)}`
+                                : `${formatSeconds(secondsPassed)} / ${formatSeconds(timer.length)}`
                         }})
                     </Button>
                 </DialogFooter>

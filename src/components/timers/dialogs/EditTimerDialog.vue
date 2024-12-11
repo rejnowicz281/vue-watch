@@ -6,32 +6,34 @@ import DialogDescription from "@/components/ui/dialog/DialogDescription.vue";
 import DialogTrigger from "@/components/ui/dialog/DialogTrigger.vue";
 import Input from "@/components/ui/input/Input.vue";
 import Label from "@/components/ui/label/Label.vue";
+import type { Timer } from "@/lib/types/timer";
 import timerService from "@/services/timer-service";
 import { sidebarStore } from "@/store/sidebar";
-import { Plus } from "lucide-vue-next";
+import { Edit } from "lucide-vue-next";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useSidebar } from "../ui/sidebar";
 
-const name = ref("");
-const length = ref();
+const { initialName, initialLength, _id, onSuccess } = defineProps<{
+    _id: string;
+    initialName: string;
+    initialLength: number | undefined;
+    onSuccess: (timer: Timer) => void;
+}>();
+
+const name = ref(initialName);
+const length = ref(initialLength);
 const open = ref(false);
-const router = useRouter();
-
-const { state } = useSidebar();
 
 const onSubmit = async () => {
-    const res = await timerService.addTimer({
+    const res = await timerService.editTimer({
+        _id,
         name: name.value,
-        length: length.value
+        length: length.value as number
     });
 
     if (res.status === 200) {
-        sidebarStore.setTimers([...sidebarStore.timers, res.data]);
+        sidebarStore.editTimer(res.data);
+        onSuccess(res.data);
         open.value = false;
-        name.value = "";
-        length.value = undefined;
-        router.push(`/timers/${res.data._id}`);
     }
 };
 </script>
@@ -39,16 +41,13 @@ const onSubmit = async () => {
 <template>
     <Dialog :open="open" @update:open="open = $event">
         <DialogTrigger :as-child="true">
-            <Button :variant="state === 'collapsed' ? 'outline' : 'default'" class="mt-2 w-full">
-                <Plus />
-                <span class="group-data-[collapsible=icon]:hidden">Create Timer</span></Button
-            >
+            <Button><Edit />Edit Timer</Button>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader>
-                <DialogTitle>Add Timer</DialogTitle>
+                <DialogTitle>Edit Timer</DialogTitle>
                 <DialogDescription>
-                    Add a new timer to your collection. Click submit to save the timer.
+                    Edit the timer's name and length. Click submit to save the changes.
                 </DialogDescription>
             </DialogHeader>
             <form @submit.prevent="onSubmit" class="grid gap-4">

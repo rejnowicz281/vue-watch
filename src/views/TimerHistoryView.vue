@@ -17,13 +17,11 @@ const route = useRoute();
 
 const id = computed(() => route.params.id as string);
 
-const isInfiniteTimer = computed(() => id.value === "infinite" || !id.value);
-
 const { data, error, isLoading, doFetch } = useFetch<HistoryEntry[]>(
-    async () => await timerHistoryService.getTimerHistory(isInfiniteTimer.value ? "infinite" : id.value)
+    async () => await timerHistoryService.getTimerHistory(id.value === "infinite" ? "infinite" : id.value)
 );
 
-watch(id, () => doFetch && doFetch());
+watch(id, doFetch);
 
 const onDelete = async (id: string) => {
     if (!data.value) return;
