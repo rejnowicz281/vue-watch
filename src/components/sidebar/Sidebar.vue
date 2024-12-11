@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Sidebar, SidebarContent, SidebarFooter, SidebarMenuSkeleton } from "@/components/ui/sidebar";
 
+import AddTimerDialog from "@/components/sidebar/AddTimerDialog.vue";
 import {
     SidebarGroup,
     SidebarGroupContent,
@@ -14,12 +15,10 @@ import { formatSeconds } from "@/lib/utils/general";
 import timerService from "@/services/timer-service";
 import { authStore } from "@/store/auth";
 import { sidebarStore } from "@/store/sidebar";
-import { Infinity, LoaderCircle, Play, Plus } from "lucide-vue-next";
+import { Infinity, Play } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import LogoutButton from "../auth/LogoutButton.vue";
-import Button from "../ui/button/Button.vue";
-import Input from "../ui/input/Input.vue";
 import SidebarHeader from "../ui/sidebar/SidebarHeader.vue";
 
 const { error, isLoading } = useAsync(async () => {
@@ -55,18 +54,8 @@ const onSubmit = async () => {
 <template>
     <Sidebar variant="floating" collapsible="icon">
         <SidebarContent>
-            <SidebarHeader class="group-data-[collapsible=icon]:hidden">
-                <form v-on:submit.prevent="onSubmit">
-                    <div class="flex flex-col gap-1">
-                        <Input v-model="name" :disabled="isLoading" placeholder="New Timer" />
-                        <Input v-model="length" :disabled="isLoading" type="number" placeholder="Length" />
-                    </div>
-                    <Button :disabled="isLoading || isSubmitting" class="mt-2 w-full" type="submit">
-                        <LoaderCircle v-if="isSubmitting" class="animate-spin" />
-                        <Plus v-else />
-                        Create Timer</Button
-                    >
-                </form>
+            <SidebarHeader>
+                <AddTimerDialog />
             </SidebarHeader>
             <SidebarGroup>
                 <SidebarGroupLabel>Timers</SidebarGroupLabel>
