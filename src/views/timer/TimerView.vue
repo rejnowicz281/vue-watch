@@ -8,8 +8,9 @@ import { useAsync } from "@/composables/use-async";
 import { type Timer } from "@/lib/types/timer";
 import { infiniteTimer, isTimerInfinite } from "@/lib/utils/timers";
 import timerService from "@/services/timer-service";
-import { sidebarStore } from "@/store/sidebar";
+import { History } from "lucide-vue-next";
 import { useRoute, useRouter } from "vue-router";
+import DeleteAlertDialog from "./components/DeleteAlertDialog.vue";
 import TimerFunctionality from "./components/TimerFunctionality.vue";
 
 const route = useRoute();
@@ -28,17 +29,6 @@ const { error, isLoading, doFetch } = useAsync(async () => {
 
 watch(id, doFetch);
 
-const onDelete = async () => {
-    if (!timer.value) return;
-
-    const res = await timerService.deleteTimer(id.value);
-
-    if (res.status === 200) {
-        sidebarStore.setTimers(sidebarStore.timers.filter((timer) => timer._id !== id.value));
-        router.push("/timers/infinite");
-    }
-};
-
 const onEditSuccess = async (newTimer: Timer) => {
     timer.value = newTimer;
 };
@@ -52,17 +42,25 @@ const onEditSuccess = async (newTimer: Timer) => {
     <div v-else-if="!timer">
         <p>Timer not found</p>
     </div>
-    <template v-else>
-        <RouterLink :to="`/timers/${id}/history`">Go to History</RouterLink>
-        <h1 class="text-4xl font-bold">{{ timer.name }}</h1>
-        <Button v-if="!isTimerInfinite(timer)" variant="destructive" @click="onDelete"> Delete </Button>
-        <EditTimerDialog
-            v-if="!isTimerInfinite(timer)"
-            :initialName="timer.name"
-            :initialLength="timer.length"
-            :onSuccess="onEditSuccess"
-            :_id="timer._id"
-        />
-        <TimerFunctionality :timer="timer" />
-    </template>
+    <div class="flex-1 flex flex-col" v-else>
+        <div class="flex-1 flex flex-col items-center gap-2 justify-center">
+            <h1 class="text-4xl font-bold">{{ timer.name }}</h1>
+            <TimerFunctionality :timer="timer" />
+        </div>
+        <div class="flex gap-2 justify-center pb-3">
+            <DeleteAlertDialog :id="timer._id" v-if="!isTimerInfinite(timer)" />
+            <EditTimerDialog
+                v-if="!isTimerInfinite(timer)"
+                :initialName="timer.name"
+                :initialLength="timer.length"
+                :onSuccess="onEditSuccess"
+                :_id="timer._id"
+            />
+            <Button variant="outline" size="icon" :asChild="true">
+                <RouterLink :to="`/timers/${id}/history`">
+                    <History />
+                </RouterLink>
+            </Button>
+        </div>
+    </div>
 </template>

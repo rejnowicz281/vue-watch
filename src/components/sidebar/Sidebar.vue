@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sidebar, SidebarContent, SidebarFooter, SidebarMenuSkeleton } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarMenuSkeleton, useSidebar } from "@/components/ui/sidebar";
 
 import AddTimerDialog from "@/components/sidebar/AddTimerDialog.vue";
 import {
@@ -16,8 +16,8 @@ import timerService from "@/services/timer-service";
 import { authStore } from "@/store/auth";
 import { sidebarStore } from "@/store/sidebar";
 import { Infinity, Play } from "lucide-vue-next";
-import { computed, ref } from "vue";
-import { RouterLink } from "vue-router";
+import { computed } from "vue";
+import { RouterLink, useRoute } from "vue-router";
 import LogoutButton from "../auth/LogoutButton.vue";
 import SidebarHeader from "../ui/sidebar/SidebarHeader.vue";
 
@@ -27,28 +27,11 @@ const { error, isLoading } = useAsync(async () => {
     if (res.status === 200) sidebarStore.setTimers(res.data);
 });
 
+const route = useRoute();
+
 const timers = computed(() => sidebarStore.timers);
 
-const isSubmitting = ref(false);
-const name = ref();
-const length = ref();
-
-const onSubmit = async () => {
-    if (!timers.value || isSubmitting.value) return;
-
-    isSubmitting.value = true;
-
-    const res = await timerService.addTimer({ name: name.value, length: length.value });
-
-    if (res.status === 200) {
-        sidebarStore.setTimers([...sidebarStore.timers, res.data]);
-
-        name.value = "";
-        length.value = "";
-    }
-
-    isSubmitting.value = false;
-};
+const { setOpenMobile } = useSidebar();
 </script>
 
 <template>
@@ -62,7 +45,11 @@ const onSubmit = async () => {
                 <SidebarGroupContent>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton :as-child="true">
+                            <SidebarMenuButton
+                                @click="setOpenMobile(false)"
+                                :class="route.path === `/timers/infinite` ? 'bg-gray-100' : ''"
+                                :as-child="true"
+                            >
                                 <RouterLink to="/timers/infinite">
                                     <Play />
                                     <div class="flex items-center justify-between flex-1">
@@ -77,7 +64,11 @@ const onSubmit = async () => {
                         </div>
                         <SidebarMenuSkeleton v-else-if="isLoading" v-for="i in 3" :key="i" />
                         <SidebarMenuItem v-else v-for="timer in timers" :key="timer._id">
-                            <SidebarMenuButton :as-child="true">
+                            <SidebarMenuButton
+                                @click="setOpenMobile(false)"
+                                :class="route.path === `/timers/${timer._id}` ? 'bg-gray-100' : ''"
+                                :as-child="true"
+                            >
                                 <RouterLink :to="`/timers/${timer._id}`">
                                     <Play />
                                     <div class="flex items-center justify-between flex-1">

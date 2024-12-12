@@ -3,6 +3,7 @@ import Button from "@/components/ui/button/Button.vue";
 import type { Timer } from "@/lib/types/timer";
 import { formatSeconds } from "@/lib/utils/general";
 import { isTimerInfinite } from "@/lib/utils/timers";
+import { CirclePlay, Pause, Play, StopCircle } from "lucide-vue-next";
 import { onBeforeUnmount, ref, watch } from "vue";
 import EndDialog from "./EndDialog.vue";
 
@@ -89,13 +90,27 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div>
-        <p>{{ formatSeconds(seconds) }}</p>
-        <template v-if="isTimerInfinite(timer) || seconds >= 1">
-            <Button v-if="paused" @click="start">{{ started ? "Resume" : "Start" }}</Button>
-            <Button v-else @click="pause">Pause</Button>
-        </template>
-        <Button variant="outline" v-if="started" @click="initEnd">End</Button>
+    <div class="fle flex-col items-center">
+        <p class="text-5xl mb-4">{{ formatSeconds(seconds) }}</p>
+        <div class="flex justify-center gap-1">
+            <template v-if="isTimerInfinite(timer) || seconds >= 1">
+                <Button v-if="paused" @click="start">
+                    <template v-if="started">
+                        <Play />
+                    </template>
+                    <template v-else>
+                        Start
+                        <CirclePlay />
+                    </template>
+                </Button>
+                <Button v-else @click="pause">
+                    <Pause />
+                </Button>
+            </template>
+            <Button variant="outline" v-if="started" @click="initEnd">
+                <StopCircle />
+            </Button>
+        </div>
 
         <EndDialog
             v-if="dialogVisible"

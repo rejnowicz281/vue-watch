@@ -43,7 +43,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col p-1">
         <Loading v-if="isLoading" />
         <RouterView v-else />
     </div>

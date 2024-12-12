@@ -1,6 +1,6 @@
 import DashboardLayout from "@/components/layouts/DashboardLayout.vue";
 import AuthView from "@/views/AuthView.vue";
-import TimerHistoryView from "@/views/TimerHistoryView.vue";
+import TimerHistoryView from "@/views/timer-history/TimerHistoryView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import TimerView from "../views/timer/TimerView.vue";
 

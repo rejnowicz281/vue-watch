@@ -23,7 +23,10 @@ const name = ref(initialName);
 const length = ref(initialLength);
 const open = ref(false);
 
+const isSubmitting = ref(false);
+
 const onSubmit = async () => {
+    isSubmitting.value = true;
     const res = await timerService.editTimer({
         _id,
         name: name.value,
@@ -35,13 +38,15 @@ const onSubmit = async () => {
         onSuccess(res.data);
         open.value = false;
     }
+
+    isSubmitting.value = false;
 };
 </script>
 
 <template>
     <Dialog :open="open" @update:open="open = $event">
         <DialogTrigger :as-child="true">
-            <Button><Edit />Edit Timer</Button>
+            <Button variant="outline" size="icon"><Edit /></Button>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader>
@@ -78,7 +83,7 @@ const onSubmit = async () => {
                     <DialogClose type="button" variant="outline" :as-child="true">
                         <Button>Cancel</Button>
                     </DialogClose>
-                    <Button>Submit</Button>
+                    <Button :disabled="isSubmitting">Submit</Button>
                 </DialogFooter>
             </form>
         </DialogContent>

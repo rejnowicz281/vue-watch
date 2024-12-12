@@ -20,7 +20,11 @@ const router = useRouter();
 
 const { state } = useSidebar();
 
+const isSubmitting = ref(false);
+
 const onSubmit = async () => {
+    isSubmitting.value = true;
+
     const res = await timerService.addTimer({
         name: name.value,
         length: length.value
@@ -33,6 +37,8 @@ const onSubmit = async () => {
         length.value = undefined;
         router.push(`/timers/${res.data._id}`);
     }
+
+    isSubmitting.value = false;
 };
 </script>
 
@@ -79,7 +85,7 @@ const onSubmit = async () => {
                     <DialogClose type="button" variant="outline" :as-child="true">
                         <Button>Cancel</Button>
                     </DialogClose>
-                    <Button>Submit</Button>
+                    <Button :disabled="isSubmitting">Submit</Button>
                 </DialogFooter>
             </form>
         </DialogContent>
